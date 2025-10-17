@@ -22,6 +22,19 @@ services:
       retries: 20
 
 
+  customers-api:
+    build: ./customers-api
+    environment:
+      DB_URL: ${DB_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      SERVICE_TOKEN: ${SERVICE_TOKEN}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+    - "3001:3001"
+
+
   orders-api:
     build: ./orders-api
     environment:
