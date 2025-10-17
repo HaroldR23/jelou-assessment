@@ -8,10 +8,16 @@ export const getProducts = async (pool, req, res) => {
   const { search, cursor, limit } = parsed.data;
   const params = [];
   let where = 'WHERE 1=1';
-  if (search) { where += ' AND (sku LIKE ? OR name LIKE ?)'; params.push(`%${search}%`, `%${search}%`); }
-  if (cursor) { where += ' AND id > ?'; params.push(cursor); }
+  if (search) { 
+    where += ' AND (sku LIKE ? OR name LIKE ?)'; 
+    params.push(`%${search}%`, `%${search}%`); 
+  }
+  if (cursor) { 
+    where += ' AND id > ?'; 
+    params.push(cursor); 
+  }
 
-  const sql = `SELECT id, sku, name, price_cents, stock, created_at FROM products ${where} ORDER BY id ASC LIMIT ?`;
+  const sql = `SELECT id, sku, name, price_cents, stock, created_at FROM products ${where} ORDER BY id ASC LIMIT ${limit + 1}`;
   params.push(limit + 1);
 
   const [rows] = await pool.execute(sql, params);

@@ -6,11 +6,26 @@ export const createOrderSchema = z.object({
 });
 
 export const getOrdersSchema = z.object({
-  status: z.enum(['CREATED','CONFIRMED','CANCELED']).optional(),
-  from: z.date().optional(),
-  to: z.date().optional(),
-  cursor: z.coerce.number().int().positive().optional(),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(10),
+  status: z.preprocess(
+    v => (v === '' ? undefined : v),
+    z.enum(['CREATED', 'CONFIRMED', 'CANCELED']).optional()
+  ),
+  from: z.preprocess(
+    v => (v ? new Date(v) : undefined),
+    z.date().optional()
+  ),
+  to: z.preprocess(
+    v => (v ? new Date(v) : undefined),
+    z.date().optional()
+  ),
+  cursor: z.preprocess(
+    v => (v === '' || v === undefined ? undefined : Number(v)),
+    z.number().int().positive().optional()
+  ),
+  limit: z.preprocess(
+    v => (v === '' || v === undefined ? 10 : Number(v)),
+    z.number().int().min(1).max(100).default(10)
+  ),
 });
 
 export const createProductSchema = z.object({
@@ -27,7 +42,9 @@ export const editProductSchema = z.object({
 }).refine((d) => d.name !== undefined || d.price_cents !== undefined || d.stock !== undefined, { message: 'No fields to update' });
 
 export const getProductsSchema = z.object({
-  search: z.string().trim().optional().default(''),
-  cursor: z.coerce.number().int().positive().optional(),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(10),
-});
+    search: z.preprocess(v => (v === '' ? undefined : v), z.string().trim().optional()),
+    cursor: z.preprocess(v => (v === '' || v === undefined ? undefined : Number(v)),
+                         z.number().int().positive().optional()),
+    limit:  z.preprocess(v => (v === '' || v === undefined ? 10 : Number(v)),
+                         z.number().int().min(1).max(100).default(10)),
+  });

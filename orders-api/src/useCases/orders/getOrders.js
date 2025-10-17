@@ -11,8 +11,8 @@ export const getOrders = async (pool, req, res) => {
     if (from)  { where += ' AND created_at >= ?'; params.push(new Date(from)); }
     if (to)    { where += ' AND created_at < ?'; params.push(new Date(to)); }
     if (cursor){ where += ' AND id > ?'; params.push(cursor); }
-  
-    const sql = `SELECT id, customer_id, status, total_cents, created_at FROM orders ${where} ORDER BY id ASC LIMIT ?`;
+
+    const sql = `SELECT id, customer_id, status, total_cents, created_at FROM orders ${where} ORDER BY id ASC LIMIT ${limit + 1}`;
     params.push(limit + 1);
   
     const [rows] = await pool.execute(sql, params);
