@@ -15,8 +15,8 @@ plugins:
 
 custom:
   serverless-offline:
-    httpPort: 3000     # donde expones el endpoint HTTP
-    lambdaPort: 3004   # cambia este para evitar conflicto con Orders (3002)
+    httpPort: 3000    
+    lambdaPort: 3004   
     reloadHandler: true
 
 functions:
