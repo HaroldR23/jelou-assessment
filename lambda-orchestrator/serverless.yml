@@ -1,0 +1,28 @@
+service: lambda-orchestrator
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+  environment:
+    CUSTOMERS_API_BASE: ${env:CUSTOMERS_API_BASE}
+    ORDERS_API_BASE: ${env:ORDERS_API_BASE}
+    SERVICE_TOKEN: ${env:SERVICE_TOKEN}
+    JWT_TOKEN: ${env:JWT_TOKEN}
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000     # donde expones el endpoint HTTP
+    lambdaPort: 3004   # cambia este para evitar conflicto con Orders (3002)
+    reloadHandler: true
+
+functions:
+  orchestrate:
+    handler: handler.createAndConfirm
+    events:
+      - httpApi:
+          method: POST
+          path: /orchestrator/create-and-confirm-order
