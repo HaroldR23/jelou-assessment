@@ -39,12 +39,19 @@ Stack:
 
 ## 3) Levanta la lambda-orchestrator
 
-  ### 2.1 Crear `.env` en el root del folder `/lambda-orchestrator`  y copiar el contenido de `.env.example`:
+  ### 3.1 Crear `.env` en el root del folder `/lambda-orchestrator`  y copiar el contenido de `.env.example`:
   ```
     cp .env.example .env
   ```
 
-  ### 2.2 Generar `JWT_TOKEN`:
+  ### 3.2 Instala las dependencias requeridas:
+
+  Ejecuta este comando para instalar la dependencias:
+    ```
+      npm install
+    ```
+
+  ### 3.3 Generar `JWT_TOKEN`:  ```
 
   Para poder hacer requests desde nuestra lambda a las apis, tenemos que firmar un secreto (ten en cuenta que debe ser el valor de la valriable `SERVICE_TOKEN` en este caso es super-secret), 
   para esto, ejecuta el siguiente comando, luego usa ese token en la variable de entorno `JWT_TOKEN` de la lambda:
@@ -52,7 +59,7 @@ Stack:
     node -e "console.log(require('jsonwebtoken').sign({ sub: 1, role: 'admin' }, 'super-secret', { expiresIn: '1h' }))"
   ```
 
-  ### 2.3 Ejecutar la lambda en local:
+  ### 3.4 Ejecutar la lambda en local:
 
   Solo debes ejecutar el siguiente comando para ejecutar la lambda en local:
   ```
